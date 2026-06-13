@@ -49,3 +49,14 @@ document.querySelectorAll("button").forEach((button) => {
         history.pushState({}, "", url);
     });
 });
+
+    // ページ読み込み時にURLから復元
+    const currentId = new URLSearchParams(location.search).get("id");
+
+    document.querySelectorAll("[data-id]").forEach(button => {
+        if (button.dataset.id === currentId) {
+            button.classList.add("active");
+        } else {
+            button.classList.remove("active");
+        }
+    });
