@@ -36,3 +36,16 @@ btns.forEach((btn) => {
         btn.style.color = "#fff";
     });
 });
+
+
+// 車、電車のボタンをクリックするとURLパラメータを付与
+document.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+        const id = button.dataset.id;
+
+        const url = new URL(window.location);
+        url.searchParams.set("id", id);
+        
+        history.pushState({}, "", url);
+    });
+});
