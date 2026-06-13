@@ -1,62 +1,49 @@
-// フィルタ表示
 const buttons = document.querySelectorAll("button");
 const list = document.querySelectorAll("li");
 
-buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-        const filter = button.dataset.id;
-
-        list.forEach((li => {
-            const id = li.dataset.id;
-
-            if (filter === id) {
-                li.style.display = "";
-            } else {
-                li.style.display = "none";
-            }
-        }));
+function setActiveButton(id) {
+    buttons.forEach(button => {
+        if (button.dataset.id === id) {
+            button.style.backgroundColor = "#ED1A3D";
+            button.style.color = "#fff";
+        } else {
+            button.style.backgroundColor = "";
+            button.style.color = "";
+        }
     });
-});
+}
 
-// ボタンをクリックしたら背景色を赤くする
-const btns = document.querySelectorAll("button");
-
-
-btns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-
-        // 全部リセット
-        buttons.forEach(b => {
-            b.style.backgroundColor = "";
-            b.style.color = "";
-        });
-
-        // クリックしたやつだけ適用
-        btn.style.backgroundColor = "#ED1A3D";
-        btn.style.color = "#fff";
+function filterList(id) {
+    list.forEach(li => {
+        if (li.dataset.id === id) {
+            li.style.display = "";
+        } else {
+            li.style.display = "none";
+        }
     });
-});
+}
 
+// ページ読み込み時
+const currentId = new URLSearchParams(location.search).get("id");
 
-// 車、電車のボタンをクリックするとURLパラメータを付与
-document.querySelectorAll("button").forEach((button) => {
+if (currentId) {
+    setActiveButton(currentId);
+    filterList(currentId);
+}
+
+buttons.forEach(button => {
     button.addEventListener("click", () => {
         const id = button.dataset.id;
 
-        const url = new URL(window.location);
+        // フィルタ
+        filterList(id);
+
+        // ボタン色
+        setActiveButton(id);
+
+        // URL更新
+        const url = new URL(location);
         url.searchParams.set("id", id);
-        
         history.pushState({}, "", url);
     });
 });
-
-    // ページ読み込み時にURLから復元
-    const currentId = new URLSearchParams(location.search).get("id");
-
-    document.querySelectorAll("[data-id]").forEach(button => {
-        if (button.dataset.id === currentId) {
-            button.classList.add("active");
-        } else {
-            button.classList.remove("active");
-        }
-    });
